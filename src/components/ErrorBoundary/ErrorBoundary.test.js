@@ -2,23 +2,23 @@ import React from 'react'
 import { mount } from 'enzyme';
 import ErrorBoundary from './ErrorBoundary'
 
+const Throw = () => { throw new Error() }
+
 describe('<ErrorBoundary />', () => {
+  it('renders state.error', () => {
+    const wrapper = mount(<ErrorBoundary><Throw /></ErrorBoundary>)
+    expect(wrapper).toHaveHTML('<h1>Couldn\'t display element.</h1>')
+  })
+
+  it('renders props.handler', () => {
+    const handler = err => 'Hello'
+    const wrapper = mount(<ErrorBoundary handler={handler}><Throw /></ErrorBoundary>)
+    expect(wrapper).toHaveHTML('Hello')
+  })
+
   it('renders props.children', () => {
     const Children = () => <div>Children</div>
     const wrapper = mount(<ErrorBoundary><Children /></ErrorBoundary>)
-    expect(wrapper).toContainReact(<Children />)
-  })
-
-  it('renders default error', () => {
-    const Throw = () => { throw new Error() }
-    const wrapper = mount(<ErrorBoundary><Throw /></ErrorBoundary>)
-    expect(wrapper).toContainReact(<h1>Couldn't display element.</h1>)
-  })
-
-  it('renders handler', () => {
-    const Throw = () => { throw new Error() }
-    const handler = e => 'Hello'
-    const wrapper = mount(<ErrorBoundary handler={handler}><Throw /></ErrorBoundary>)
-    expect(wrapper).toHaveHTML(handler())
+    expect(wrapper).toHaveHTML('<div>Children</div>')
   })
 })
