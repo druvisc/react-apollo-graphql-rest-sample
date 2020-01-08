@@ -1,8 +1,7 @@
 import React from 'react'
-import gql from 'graphql-tag'
-import { useLazyQuery } from '@apollo/react-hooks'
+import { gql, useLazyQuery } from '@apollo/client'
 
-const GET_EXCHANGE_RATES = gql`
+export const GET_EXCHANGE_RATES = gql`
   query exchangeRatesQuery {
     exchangeRates @rest(type: "ExchangeRates", endpoint: "exchangerates" path: "latest/") {
       date

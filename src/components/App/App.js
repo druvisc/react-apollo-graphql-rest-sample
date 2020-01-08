@@ -1,8 +1,8 @@
 import React from 'react'
-import { ApolloClient } from 'apollo-client'
+// import { ApolloClient } from 'apollo-client'
 import { RestLink } from 'apollo-link-rest'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { ApolloProvider } from '@apollo/react-hooks'
+// import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import ExchangeRates from '../ExchangeRates/ExchangeRates'
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary'
 

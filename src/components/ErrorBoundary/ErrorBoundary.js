@@ -17,7 +17,7 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.error) {
       if (this.props.handler) return this.props.handler(this.state.error)
-      return <h1>Couldn't load {this.props.children.type.name}.</h1>
+      return <h1>Couldn't display element.</h1>
     }
     return this.props.children
   }
