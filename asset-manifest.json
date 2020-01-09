@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.js": "/react-apollo-graphql-rest-sample/static/js/main.b62f05be.chunk.js",
+    "main.js.map": "/react-apollo-graphql-rest-sample/static/js/main.b62f05be.chunk.js.map",
+    "runtime-main.js": "/react-apollo-graphql-rest-sample/static/js/runtime-main.569744c6.js",
+    "runtime-main.js.map": "/react-apollo-graphql-rest-sample/static/js/runtime-main.569744c6.js.map",
+    "static/js/2.736a7647.chunk.js": "/react-apollo-graphql-rest-sample/static/js/2.736a7647.chunk.js",
+    "static/js/2.736a7647.chunk.js.map": "/react-apollo-graphql-rest-sample/static/js/2.736a7647.chunk.js.map",
+    "index.html": "/react-apollo-graphql-rest-sample/index.html",
+    "precache-manifest.2dbfbdff3425ac2ac8fece7058428d04.js": "/react-apollo-graphql-rest-sample/precache-manifest.2dbfbdff3425ac2ac8fece7058428d04.js",
+    "service-worker.js": "/react-apollo-graphql-rest-sample/service-worker.js",
+    "static/js/2.736a7647.chunk.js.LICENSE": "/react-apollo-graphql-rest-sample/static/js/2.736a7647.chunk.js.LICENSE"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.569744c6.js",
+    "static/js/2.736a7647.chunk.js",
+    "static/js/main.b62f05be.chunk.js"
+  ]
+}
