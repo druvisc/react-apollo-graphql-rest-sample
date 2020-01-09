@@ -1,51 +1,78 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { MockedProvider } from '@apollo/client/testing'
-import ExchangeRates, { GET_EXCHANGE_RATES } from './ExchangeRates'
+import ExchangeRates from './ExchangeRates'
+import { GET_EXCHANGE_RATES_DATE } from './queries'
+import { formatDate } from '../../utils'
+
+const Now = new Date()
+const FormattedNow = formatDate(Now)
+const Weekday = new Date(2020, 0, 9)
+const FormattedWeekday = formatDate(Weekday)
+const Weekend = new Date(2020, 0, 5)
+const FormattedWeekend = formatDate(Weekend)
 
 const mocks = {
-  data: {
+  error: {
     request: {
-      query: GET_EXCHANGE_RATES,
+      query: GET_EXCHANGE_RATES_DATE
+    },
+    error: new Error()
+  },
+  weekend: {
+    request: {
+      query: GET_EXCHANGE_RATES_DATE,
+      variables: { date: FormattedWeekend }
     },
     result: {
       data: {
         exchangeRates: {
-          date: '2020-01-07',
+          date: 'Not Weekend',
           base: 'EUR',
           rates: {
-            HKD: 8.6836,
-          },
+            HKD: 8.6836
+          }
         }
       }
     }
   },
-  error: {
+  weekday: {
     request: {
-      query: GET_EXCHANGE_RATES,
+      query: GET_EXCHANGE_RATES_DATE,
+      variables: { date: FormattedWeekday }
     },
-    error: new Error()
-  }
+    result: {
+      data: {
+        exchangeRates: {
+          date: FormattedWeekday,
+          base: 'EUR',
+          rates: {
+            HKD: 8.6836
+          }
+        }
+      }
+    }
+  },
 }
 
-const waitForData = () => new Promise(res => setTimeout(res, 1))
+const wait = () => new Promise(res => setTimeout(res, 1))
 
 describe('<ExchangeRates />', () => {
   it('renders !called state', () => {
     const wrapper = mount(<ExchangeRates />)
-    expect(wrapper).toHaveHTML('<button>Load exchange rates</button>')
+    expect(wrapper).toHaveHTML(
+      `<div class="date">${FormattedNow}</div><div><button name="previous">Previous</button><button name="load">Load exchange rates</button><button name="next" disabled="">Next</button></div>`
+    )
   })
 
   it('renders loading state', () => {
     const wrapper = mount(
-      <MockedProvider mocks={[mocks.data]} addTypename={false}>
+      <MockedProvider mocks={[mocks.weekday]} addTypename={false}>
         <ExchangeRates />
       </MockedProvider>
     )
 
-    wrapper.find('button').simulate('click')
-
-    expect(wrapper.find('Button')).toHaveHTML('<button>Load exchange rates</button>')
+    wrapper.find('button[name="load"]').simulate('click')
     expect(wrapper.find('Rates')).toHaveHTML('<p>Loading...</p>')
   })
 
@@ -56,26 +83,39 @@ describe('<ExchangeRates />', () => {
       </MockedProvider>
     )
 
-    wrapper.find('button').simulate('click')
-    await waitForData()
+    wrapper.find('button[name="load"]').simulate('click')
+    await wait()
     wrapper.update()
 
-    expect(wrapper.find('Button')).toHaveHTML('<button>Load exchange rates</button>')
-    expect(wrapper.find('Rates')).toHaveHTML('<p>Couldn\'t load exchange rates</p>')
+    expect(wrapper.find('Rates')).toHaveHTML('<p>Couldn\'t load exchange rates.</p>')
+  })
+
+
+  it('renders different date state', async () => {
+    const wrapper = mount(
+      <MockedProvider mocks={[mocks.weekend]} addTypename={false}>
+        <ExchangeRates initialDate={Weekend} />
+      </MockedProvider>
+    )
+
+    wrapper.find('button[name="load"]').simulate('click')
+    await wait()
+    wrapper.update()
+
+    expect(wrapper.find('Rates')).toHaveHTML(`<p>Exchange rates aren't available for ${FormattedWeekend}.</p>`)
   })
 
   it('renders data state', async () => {
     const wrapper = mount(
-      <MockedProvider mocks={[mocks.data]} addTypename={false}>
+      <MockedProvider mocks={[mocks.weekday]} addTypename={false}>
         <ExchangeRates />
       </MockedProvider>
     )
 
-    wrapper.find('button').simulate('click')
-    await waitForData()
+    wrapper.find('button[name="load"]').simulate('click')
+    await wait()
     wrapper.update()
 
-    expect(wrapper.find('Button')).toHaveHTML('<button>Load exchange rates</button>')
     expect(wrapper.find('Rates')).toHaveHTML('<table><tbody><tr><td>HKD</td><td>8.6836</td></tr></tbody></table>')
   })
 })

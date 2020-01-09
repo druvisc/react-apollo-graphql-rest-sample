@@ -10,15 +10,15 @@ describe('<ErrorBoundary />', () => {
     expect(wrapper).toHaveHTML('<h1>Couldn\'t display element.</h1>')
   })
 
-  it('renders props.handler', () => {
-    const handler = err => 'Hello'
-    const wrapper = mount(<ErrorBoundary handler={handler}><Throw /></ErrorBoundary>)
-    expect(wrapper).toHaveHTML('Hello')
+  it('renders props.errorRender', () => {
+    const errorRender = ({ error }) => 'Error'
+    const wrapper = mount(<ErrorBoundary errorRender={errorRender}><Throw /></ErrorBoundary>)
+    expect(wrapper).toHaveHTML('Error')
   })
 
   it('renders props.children', () => {
-    const Children = () => <div>Children</div>
-    const wrapper = mount(<ErrorBoundary><Children /></ErrorBoundary>)
-    expect(wrapper).toHaveHTML('<div>Children</div>')
+    const Children = ({ childrenProp }) => <div>{childrenProp}</div>
+    const wrapper = mount(<ErrorBoundary><Children childrenProp={'123'} /></ErrorBoundary>)
+    expect(wrapper).toHaveHTML('<div>123</div>')
   })
 })
